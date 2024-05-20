@@ -45,6 +45,9 @@ defaults write NSGlobalDomain _HIHideMenuBar -bool false
 # Menu bar: Don't automatically hide and show menu bar in full screen
 defaults write NSGlobalDomain AppleMenuBarVisibleInFullscreen -int 1
 
+# Screenshots: path to save screenshots
+defaults write com.apple.screencapture location ~/Pictures/screenshotes
+
 # Kill affected applications
 for app in "Dock" \
 	"ControlStrip" \
