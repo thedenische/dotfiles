@@ -10,6 +10,7 @@ return {
                 'java',
                 'javascript',
                 'go',
+                'python'
             },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)

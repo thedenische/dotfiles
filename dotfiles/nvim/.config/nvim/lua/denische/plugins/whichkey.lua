@@ -3,11 +3,13 @@ return {
     event = 'VeryLazy',
     opts = {
         spec = {
-            { '<leader>g', group = 'git' },
-            { '<leader>f', group = 'find' },
-            { '<leader>l', group = 'lsp' },
-            { '<leader>d', group = 'debug' },
-            { '<leader>dt', group = 'debug test' },
+            { '<leader>g',  group = '[G]it' },
+            { '<leader>gm', group = '[G]it [M]erge request' },
+            { '<leader>f',  group = '[F]ind' },
+            { '<leader>l',  group = '[L]sp' },
+            { '<leader>ld', group = '[L]sp [D]iagnostic' },
+            { '<leader>d',  group = '[D]ebug' },
+            { '<leader>dt', group = '[D]ebug [T]est' },
         }
     },
     keys = {

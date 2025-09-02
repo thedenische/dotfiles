@@ -1,5 +1,4 @@
 local telescope = require('telescope')
-local builtin = require('telescope.builtin')
 local sorters = require('telescope.sorters')
 
 require('denische.plugins.telescope.keymaps')
