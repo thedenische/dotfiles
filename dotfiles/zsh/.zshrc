@@ -88,8 +88,11 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# jenv
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
 # export MANPATH="/usr/local/man:$MANPATH"
-export JAVA_HOME=$(/usr/libexec/java_home)
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
