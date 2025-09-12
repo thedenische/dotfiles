@@ -3,28 +3,40 @@ return {
     {
         'neovim/nvim-lspconfig',
         dependencies = { 'saghen/blink.cmp' },
-        opts = require('denische.plugins.lsp.options'),
-        config = require('denische.plugins.lsp.config')
+        opts = require('denische.plugins.lsp.lspconfig.options'),
+        config = require('denische.plugins.lsp.lspconfig.config')
     },
     -- LSP servers installation
     {
         'mason-org/mason.nvim',
         opts = {}
     },
-    -- LSP servers automatic installation and enabling
+    -- Connection between lspconfig and mason
+    -- LSP servers automatic installation
     {
         'mason-org/mason-lspconfig.nvim',
-        opts = require('denische.plugins.lsp.mason-lspconfig-options'),
+        opts = require('denische.plugins.lsp.mason-lspconfig.options'),
         dependencies = {
             'mason-org/mason.nvim',
             'neovim/nvim-lspconfig',
         },
     },
-    -- integration CLI tools to the LSP
+    {
+        'nvim-treesitter/nvim-treesitter',
+        build = ':TSUpdate',
+        config = function()
+            require('denische.plugins.lsp.treesitter.config')
+        end
+    },
+    -- Collection of code snippets
+    {
+        'rafamadriz/friendly-snippets'
+    },
+    -- Integration CLI tools to the LSP
     {
         'nvimtools/none-ls.nvim',
         config = function()
-            require('denische.plugins.lsp.nonels-config')
+            require('denische.plugins.lsp.nonels.config')
         end
     },
     -- LSP issues navigation
@@ -32,36 +44,33 @@ return {
         'folke/trouble.nvim',
         opts = {},
         cmd = 'Trouble',
-        keys = require('denische.plugins.lsp.trouble-keymaps'),
+        keys = require('denische.plugins.lsp.trouble.keymaps'),
     },
+    -- Additional LSP actions (like extract variable, etc.)
+    {
+        'ThePrimeagen/refactoring.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'nvim-treesitter/nvim-treesitter',
+        },
+        keys = require('denische.plugins.lsp.refactoring.keymaps'),
+        lazy = false,
+        opts = {},
+    },
+    -- LSP icons for autocomplete
     {
         'onsails/lspkind.nvim',
         lazy = true,
-        opts = {
-            symbol_map = {
-                Copilot = "",
-            },
-        },
+        opts = require('denische.plugins.lsp.lspkind.options'),
         config = function()
-            vim.api.nvim_set_hl(0, "BlinkCmpKindCopilot", { fg = "#6CC644" })
-            require('lspkind').setup({
-                symbol_map = {
-                    Copilot = "",
-                },
-            })
+            require('denische.plugins.lsp.lspkind.config')
         end
     },
-    -- lua LSP configration
+    -- Lua LSP configration
     {
         'folke/lazydev.nvim',
         ft = 'lua', -- only load on lua files
-        opts = {
-            library = {
-                -- See the configuration section for more details
-                -- Load luvit types when the `vim.uv` word is found
-                { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-            },
-        },
+        opts = require('denische.plugins.lsp.lazydev.options'),
     },
     -- java LSP configuration
     -- {

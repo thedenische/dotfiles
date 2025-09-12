@@ -10,6 +10,7 @@ function loadServers(root_mod_name)
         return servers
     end
 
+    -- collect all files with servers definitions from current folder
     while true do
         local name, t = vim.uv.fs_scandir_next(scan)
 

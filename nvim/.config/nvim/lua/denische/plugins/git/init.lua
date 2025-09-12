@@ -2,7 +2,7 @@ return {
     -- editor git integration (changes, blame, etc)
     {
         'lewis6991/gitsigns.nvim',
-        keys = require('denische.plugins.git.gitsigns-keymaps'),
+        keys = require('denische.plugins.git.gitsigns.keymaps'),
         lazy = false,
         config = true,
     },
@@ -17,7 +17,7 @@ return {
             "LazyGitFilter",
             "LazyGitFilterCurrentFile",
         },
-        keys = require('denische.plugins.git.lazygit-keymaps'),
+        keys = require('denische.plugins.git.lazygit.keymaps'),
         dependencies = {
             -- optional for floating window border decoration
             "nvim-lua/plenary.nvim",
@@ -26,7 +26,7 @@ return {
     -- gitlab integration
     {
         'harrisoncramer/gitlab.nvim',
-        keys = require('denische.plugins.git.gitlab-keymaps'),
+        keys = require('denische.plugins.git.gitlab.keymaps'),
         dependencies = {
             'MunifTanjim/nui.nvim',
             'nvim-lua/plenary.nvim',
