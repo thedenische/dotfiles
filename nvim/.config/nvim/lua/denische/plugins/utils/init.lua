@@ -13,7 +13,8 @@ return {
         priority = 1000,
         lazy = false,
         ---@type snacks.Config
-        opts = require('denische.plugins.utils.snacks.options')    },
+        opts = require('denische.plugins.utils.snacks.options')
+    },
     -- tmux panels transparent navigation
     {
         'christoomey/vim-tmux-navigator',

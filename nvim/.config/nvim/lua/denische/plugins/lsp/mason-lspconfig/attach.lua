@@ -1,6 +1,6 @@
 local function lspAttach(event)
     -- load keypams on attach
-    local keys = require('denische.plugins.lsp.lspconfig.keymaps')
+    local keys = require('denische.plugins.lsp.mason-lspconfig.keymaps')
 
     for i, row in ipairs(keys) do
         local key, func, desc = row[1], row[2], row[3]
