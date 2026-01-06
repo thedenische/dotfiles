@@ -75,11 +75,15 @@ plugins=(
   brew
   docker
   mvn
+  direnv
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+# Enabgle vi mode
+bindkey -v
 
 # jenv
 export PATH="$HOME/.jenv/bin:$PATH"
@@ -91,11 +95,11 @@ eval "$(jenv init -)"
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -116,8 +120,12 @@ alias ivim='NVIM_APPNAME=nvim-igopin nvim' # igopin nvim
 # starship prompt
 eval "$(starship init zsh)"
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/homebrew/share/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/homebrew/share/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/homebrew/share/google-cloud-sdk/completion.zsh.inc' ]; then . '/opt/homebrew/share/google-cloud-sdk/completion.zsh.inc'; fi
+
