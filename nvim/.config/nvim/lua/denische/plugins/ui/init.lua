@@ -13,36 +13,6 @@ return {
             'rcarriga/nvim-notify',
         }
     },
-    -- File explorer
-    {
-        'nvim-neo-tree/neo-tree.nvim',
-        branch = 'v3.x',
-        cmd = 'Neotree',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-            'MunifTanjim/nui.nvim',
-        },
-        keys = require('denische.plugins.ui.neotree.keymaps'),
-        opts = require('denische.plugins.ui.neotree.options')
-    },
-    -- Telescope
-    {
-        'nvim-telescope/telescope.nvim',
-        -- todo: switch to the branch '0.1.x' after `filename_first` is released
-        -- branch = '0.1.x',
-        branch = 'master',
-        dependencies = { 'nvim-lua/plenary.nvim' },
-        config = function()
-            require('denische.plugins.ui.telescope.config')
-        end
-    },
-    {
-        'nvim-telescope/telescope-ui-select.nvim',
-        config = function()
-            require('denische.plugins.ui.telescope-ui.config')
-        end
-    },
     -- Status line
     {
         'nvim-lualine/lualine.nvim',
