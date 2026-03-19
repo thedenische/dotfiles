@@ -1,0 +1,7 @@
+leader_key = "f12"
+
+# Applications
+t = ["WezTerm", "terminal"]
+b = ["Zen", "browser"]
+a = ["ChatGPT", "ai"]
+
