@@ -6,17 +6,18 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
 
 vim.lsp.config("*", {
-	capabilities = capabilities,
+    capabilities = capabilities,
 })
 
 return {
-	ensure_installed = {
-		"jdtls",
-		"lua_ls",
-		"pyright",
-		"ruff",
-		"yamlls",
-		"vtsls",
-		"docker_language_server",
-	},
+    ensure_installed = {
+        "jdtls",                  -- java
+        "lua_ls",                 -- lua
+        "pyright",                -- python
+        "ruff",                   -- python linting and formatting
+        "yamlls",                 -- yaml
+        "vtsls",                  -- type script
+        "docker_language_server", -- docker
+        "harper_ls"               -- grammar checker
+    },
 }
