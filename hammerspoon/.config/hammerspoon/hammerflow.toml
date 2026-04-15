@@ -1,7 +1,26 @@
 leader_key = "f12"
 
 # Applications
-t = ["WezTerm", "terminal"]
 b = ["Zen", "browser"]
+f = ["Finder", "files"]
+t = ["WezTerm", "terminal"]
+
+[a]
+label = "[applications]"
 a = ["ChatGPT", "ai"]
+c = ["Google Chrome", "chrome"]
+k = ["KeePassXC", "keepass"]
+m = ["Telegram Desktop", "messages"]
+o = ["Microsoft Outlook", "outlook"]
+t = ["Microsoft Teams", "ms teams"]
+v = ["Visual Studio Code", "vscode"]
+
+# Window management
+[w]
+label = "[window]"
+h = ["function:moveWindowToPrevScreen", "prev screen"]
+l = ["function:moveWindowToNextScreen", "next screen"]
+k = ["function:maximizeWindow", "maximize"]
+K = ["function:fullscreenWindow", "fullscreen"]
+j = ["function:restoreWindow", "restore"]
 
