@@ -14,3 +14,7 @@ To apply package
 stow nvim
 ```
 
+## Other tools
+
+Usefull tools are listed [here](./others.md).
+
