@@ -1,2 +1,5 @@
 # TMux plugins are managed by TPM at runtime
 tmux/.config/tmux/plugins/
+
+# User-specific Hammerspoon config (copy from .example.lua)
+hammerspoon/.config/hammerspoon/browsers_config.lua

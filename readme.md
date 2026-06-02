@@ -5,7 +5,7 @@
 To apply all packages
 
 ```bash
-stow .
+stow */
 ```
 
 To apply package
