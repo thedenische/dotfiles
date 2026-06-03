@@ -13,15 +13,23 @@ if not ok then
     config = { defaultBrowser = DEFAULT_BROWSER, rules = {} }
 end
 
-local function openURL(url, browser, profile)
+local function openURL(url, browser, profile, extraArgs)
+    local args = {}
     if profile then
-        -- Chromium-based browsers support --profile-directory.
-        hs.task.new("/usr/bin/open", nil, {
-            "-b", browser,
-            "--args",
-            "--profile-directory=" .. profile,
-            url,
-        }):start()
+        table.insert(args, "--profile-directory=" .. profile)
+    end
+    for _, a in ipairs(extraArgs or {}) do
+        table.insert(args, a)
+    end
+
+    if #args > 0 then
+        -- Chromium-based browsers accept flags after --args.
+        local taskArgs = { "-b", browser, "--args" }
+        for _, a in ipairs(args) do
+            table.insert(taskArgs, a)
+        end
+        table.insert(taskArgs, url)
+        hs.task.new("/usr/bin/open", nil, taskArgs):start()
     else
         hs.urlevent.openURLWithBundle(url, browser)
     end
@@ -32,6 +40,7 @@ for _, rule in ipairs(config.rules or {}) do
     table.insert(rules, {
         browser = rule.browser,
         profile = rule.profile,
+        args = rule.args,
         match = function(_, _, _, fullURL)
             for _, pattern in ipairs(rule.hosts or {}) do
                 if string.match(fullURL, pattern) then
@@ -51,9 +60,9 @@ hs.urlevent.httpCallback = function(scheme, host, params, fullURL)
 
     for _, rule in ipairs(rules) do
         if rule.match(scheme, host, params, fullURL) then
-            openURL(fullURL, rule.browser, rule.profile)
+            openURL(fullURL, rule.browser, rule.profile, rule.args)
             return
         end
     end
-    openURL(fullURL, config.defaultBrowser or DEFAULT_BROWSER, config.defaultProfile)
+    openURL(fullURL, config.defaultBrowser or DEFAULT_BROWSER, config.defaultProfile, config.defaultArgs)
 end
