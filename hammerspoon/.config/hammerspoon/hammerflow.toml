@@ -19,9 +19,9 @@ v = ["Visual Studio Code", "vscode"]
 # Window management
 [w]
 label = "[window]"
-h = ["function:moveWindowToPrevScreen", "prev screen"]
-l = ["function:moveWindowToNextScreen", "next screen"]
-k = ["function:maximizeWindow", "maximize"]
-K = ["function:fullscreenWindow", "fullscreen"]
-j = ["function:restoreWindow", "restore"]
+h = ["function:moveWindowToWestScreen", "west screen"]
+l = ["function:moveWindowToEastScreen", "east screen"]
+j = ["function:minimizeWindow", "minimize"]
+k = ["function:toggleMaximizeWindow", "maximize"]
+f = ["function:fullscreenWindow", "fullscreen"]
 

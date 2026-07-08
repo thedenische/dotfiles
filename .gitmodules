@@ -4,3 +4,9 @@
 [submodule "hammerspoon/.config/hammerspoon/Spoons/Hammerflow.spoon"]
 	path = hammerspoon/.config/hammerspoon/Spoons/Hammerflow.spoon
 	url = https://github.com/saml-dev/Hammerflow.spoon.git
+[submodule "hammerspoon/.config/hammerspoon/Spoons/ScreenAnnotate.spoon"]
+	path = hammerspoon/.config/hammerspoon/Spoons/ScreenAnnotate.spoon
+	url = https://github.com/thedenische/ScreenAnnotate.spoon.git
+[submodule "hammerspoon/.config/hammerspoon/Spoons/WindowManager.spoon"]
+	path = hammerspoon/.config/hammerspoon/Spoons/WindowManager.spoon
+	url = https://github.com/thedenische/WindowManager.spoon.git

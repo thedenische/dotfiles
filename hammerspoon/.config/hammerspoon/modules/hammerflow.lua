@@ -2,16 +2,16 @@
 -- Hammerflow
 --
 
-local windows = require("modules.windows")
+local wm = spoon.WindowManager
 
 hs.loadSpoon("Hammerflow")
 
 spoon.Hammerflow.registerFunctions({
-    moveWindowToNextScreen = function() windows.moveWindowToScreen("next") end,
-    moveWindowToPrevScreen = function() windows.moveWindowToScreen("prev") end,
-    maximizeWindow = windows.maximizeWindow,
-    restoreWindow = windows.restoreWindow,
-    fullscreenWindow = windows.fullscreenWindow,
+    moveWindowToWestScreen = function() wm:moveWindowToScreen("west") end,
+    moveWindowToEastScreen = function() wm:moveWindowToScreen("east") end,
+    toggleMaximizeWindow = function() wm:toggleMaximize() end,
+    minimizeWindow = function() wm:minimizeWindow() end,
+    fullscreenWindow = function() wm:fullscreenWindow() end,
 })
 
 spoon.Hammerflow.loadFirstValidTomlFile({
