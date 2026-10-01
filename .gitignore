@@ -3,3 +3,6 @@ tmux/.config/tmux/plugins/
 
 # User-specific Hammerspoon config (copy from .example.lua)
 hammerspoon/.config/hammerspoon/browsers_config.lua
+
+.DS_Store
+
