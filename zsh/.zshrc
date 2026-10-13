@@ -113,7 +113,8 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias ll="lsd -Al"
+alias ls='eza'
+alias ll="ls -Al"
 alias lvim='NVIM_APPNAME=nvim-lazyvim nvim' # LazyVim
 alias ivim='NVIM_APPNAME=nvim-igopin nvim' # igopin nvim
 
