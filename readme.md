@@ -1,6 +1,6 @@
 # Dotfiles
 
-## Install with stow
+## Install with Stow
 
 To apply all packages
 
@@ -14,7 +14,7 @@ To apply package
 stow nvim
 ```
 
-## Other tools
+## Other Tools
 
-Usefull tools are listed [here](./others.md).
+Useful tools are listed [here](./others.md).
 

@@ -75,7 +75,6 @@ plugins=(
   brew
   docker
   mvn
-  direnv
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -84,10 +83,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Enabgle vi mode
 bindkey -v
-
-# jenv
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -123,6 +118,9 @@ eval "$(starship init zsh)"
 
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
+
+# mise activation
+eval "$(~/.local/bin/mise activate zsh)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/homebrew/share/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/homebrew/share/google-cloud-sdk/path.zsh.inc'; fi
