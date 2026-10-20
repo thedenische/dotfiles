@@ -1,28 +1,29 @@
 return {
-     {
-      'sainnhe/everforest',
-      lazy = false,
-      priority = 1000,
-      config = function()
-        vim.cmd.colorscheme('everforest')
-      end
+    {
+        'sainnhe/everforest',
+        lazy = false,
+        priority = 1000,
+        config = function()
+            vim.cmd.colorscheme('everforest')
+        end
     },
+    -- alternatives, loaded on demand (e.g. via <leader>uC)
     {
         'ellisonleao/gruvbox.nvim',
-        priority = 1000,
+        lazy = true,
     },
     {
         'catppuccin/nvim',
         name = 'catppuccin',
-        priority = 1000,
+        lazy = true,
     },
     {
         'doums/darcula',
-        priority = 1000,
+        lazy = true,
     },
     {
         'briones-gabriel/darcula-solid.nvim',
-        priority = 1000,
+        lazy = true,
         dependencies = {
             'rktjmp/lush.nvim'
         },

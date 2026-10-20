@@ -1,14 +1,9 @@
--- local builtin = require('telescope.builtin')
-
-local onAttachKeys = {
-    { '<leader>lr', vim.lsp.buf.rename,      '[L]sp [R]ename' },
-    { '<leader>la', vim.lsp.buf.code_action, '[L]sp code [A]ctions' },
-    { '<leader>lf', vim.lsp.buf.format,      '[L]sp [F]ormat file' },
-    { 'K',          vim.lsp.buf.hover,       'Hover Documentation' },
+-- buffer-local keymaps, set on LspAttach
+-- ({ key, func, desc, mode = 'n' by default, has = LSP method the server must support })
+return {
+    { '<leader>cr', vim.lsp.buf.rename,                          '[C]ode [R]ename',      has = 'textDocument/rename' },
+    { '<leader>ca', vim.lsp.buf.code_action,                     '[C]ode [A]ctions',     has = 'textDocument/codeAction', mode = { 'n', 'x' } },
+    { '<leader>cf', vim.lsp.buf.format,                          '[C]ode [F]ormat',      has = 'textDocument/formatting', mode = { 'n', 'x' } },
+    { '<leader>cR', function() Snacks.rename.rename_file() end,  '[C]ode [R]ename file' },
+    { '<leader>cl', function() Snacks.picker.lsp_config() end,   '[C]ode [L]SP info' },
 }
-
--- scrolling docs in hover/signature windows
-vim.keymap.set({ "n", "i" }, "<C-f>", function() return vim.lsp.util.scroll(1) end, { silent = true, expr = true })
-vim.keymap.set({ "n", "i" }, "<C-b>", function() return vim.lsp.util.scroll(-1) end, { silent = true, expr = true })
-
-return onAttachKeys

@@ -4,14 +4,15 @@ return {
         cmd = 'Copilot',
         event = 'InsertEnter',
         opts = {
-            -- settings for blink.cmp integration
-            -- see: https://github.com/giuxtaposition/blink-cmp-copilot?tab=readme-ov-file#install
-            suggestion = { enabled = true },
+            -- suggestions are shown in the blink.cmp menu via blink-copilot,
+            -- so inline ghost text is disabled to avoid duplicates
+            suggestion = { enabled = false },
             panel = { enabled = false }
         },
     },
     {
         'olimorris/codecompanion.nvim',
+        keys = require('denische.plugins.ai.codecompanion.keymaps'),
         opts = {
             strategies = {
                 chat = {

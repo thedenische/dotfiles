@@ -6,7 +6,6 @@ return {
         dependencies = {
             'rafamadriz/friendly-snippets',
             'fang2hou/blink-copilot',
-            'onsails/lspkind.nvim'
         },
         -- use a release tag to download pre-built binaries
         version = '1.*',
@@ -18,17 +17,7 @@ return {
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = require('denische.plugins.editor.cmp.options'),
-        opts_extend = { 'sources.default' }
+        opts_extend = { 'sources.default' },
+        config = require('denische.plugins.editor.cmp.config'),
     },
-    -- blocks folding
-    {
-        'kevinhwang91/nvim-ufo',
-        -- lazy = true,
-        config = function()
-            require('denische.plugins.editor.ufo.config')
-        end,
-        dependencies = {
-            'kevinhwang91/promise-async'
-        }
-    }
 }

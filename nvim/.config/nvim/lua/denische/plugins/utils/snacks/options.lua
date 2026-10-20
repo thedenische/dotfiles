@@ -1,6 +1,7 @@
 return {
 	dashboard = {},
 	explorer = {},
+	input = {},
 	picker = {
 		sources = {
 			files = {
@@ -19,4 +20,5 @@ return {
 		},
 	},
 	statuscolumn = {},
+	words = {},
 }

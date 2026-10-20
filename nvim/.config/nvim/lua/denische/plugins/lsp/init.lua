@@ -7,16 +7,30 @@ return {
     {
         "mason-org/mason.nvim",
         config = true,
+        keys = {
+            { "<leader>cm", "<cmd>Mason<cr>", desc = "[C]ode [M]ason" },
+        },
     },
     -- Connection between lspconfig and mason
-    -- LSP servers automatic installation and enabling
+    -- Automatic enabling of installed LSP servers
     {
         "mason-org/mason-lspconfig.nvim",
-        opts = require("denische.plugins.lsp.mason-lspconfig.options"),
+        config = function()
+            require("denische.plugins.lsp.mason-lspconfig.config")
+        end,
         dependencies = {
             "mason-org/mason.nvim",
             "neovim/nvim-lspconfig",
             "mfussenegger/nvim-jdtls"
+        },
+    },
+    -- All Mason packages installation (LSP servers, debug adapters, test runners, ...)
+    {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        opts = require("denische.plugins.lsp.mason-tool-installer.options"),
+        dependencies = {
+            "mason-org/mason.nvim",
+            "mason-org/mason-lspconfig.nvim", -- maps lspconfig names to Mason packages
         },
     },
     {
@@ -28,42 +42,11 @@ return {
             require("denische.plugins.lsp.treesitter.config")
         end,
     },
-    -- Collection of code snippets
-    {
-        "rafamadriz/friendly-snippets",
-    },
     -- Integration CLI tools to the LSP
     {
         "nvimtools/none-ls.nvim",
         config = function()
             require("denische.plugins.lsp.nonels.config")
-        end,
-    },
-    -- LSP issues navigation
-    {
-        "folke/trouble.nvim",
-        opts = {},
-        cmd = "Trouble",
-        keys = require("denische.plugins.lsp.trouble.keymaps"),
-    },
-    -- Additional LSP actions (like extract variable, etc.)
-    {
-        "ThePrimeagen/refactoring.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        keys = require("denische.plugins.lsp.refactoring.keymaps"),
-        lazy = false,
-        opts = {},
-    },
-    -- LSP icons for autocomplete
-    {
-        "onsails/lspkind.nvim",
-        lazy = true,
-        opts = require("denische.plugins.lsp.lspkind.options"),
-        config = function()
-            require("denische.plugins.lsp.lspkind.config")
         end,
     },
     -- Make LSP aware of file operations

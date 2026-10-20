@@ -16,8 +16,7 @@ return {
             },
             {
                 'navic',
-                color_correction = 'dynamic', -- Can be nil, 'static' or 'dynamic'. This option is useful only when you have highlights enabled.
-                navic_opts = nil              -- lua table with same format as setup's option. All options except 'lsp' options take effect when set here.
+                color_correction = 'dynamic',
             }
         },
         lualine_x = {

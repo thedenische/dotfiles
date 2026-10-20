@@ -4,6 +4,7 @@ return {
         'folke/noice.nvim',
         event = 'VeryLazy',
         opts = require('denische.plugins.ui.noice.options'),
+        keys = require('denische.plugins.ui.noice.keymaps'),
         dependencies = {
             -- if you lazy-load any plugin below, make sure to add proper `module='...'` entries
             'MunifTanjim/nui.nvim',
@@ -27,9 +28,6 @@ return {
     -- LSP based breadcrumbs (for status line)
     {
         'SmiteshP/nvim-navic',
-        dependencies = {
-            'neovim/nvim-lspconfig',
-        },
         lazy = true,
         opts = {
             highlight = true,
