@@ -1,7 +1,24 @@
+-- ask for program arguments before starting (java expects a single string)
+local function with_args(config)
+    local args = type(config.args) == 'function' and (config.args() or {}) or config.args or {}
+    local args_str = type(args) == 'table' and table.concat(args, ' ') or args
+
+    config = vim.deepcopy(config)
+    config.args = function()
+        local new_args = vim.fn.expand(vim.fn.input('Run with args: ', args_str))
+        if config.type == 'java' then
+            return new_args
+        end
+        return require('dap.utils').splitstr(new_args)
+    end
+    return config
+end
+
 return {
     { '<leader>db', function() require('dap').toggle_breakpoint() end,                                     desc = '[D]ebug [B]reakpoint' },
     { '<leader>dB', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = '[D]ebug conditional [B]reakpoint' },
     { '<leader>dc', function() require('dap').continue() end,                                              desc = '[D]ebug run / [C]ontinue' },
+    { '<leader>da', function() require('dap').continue({ before = with_args }) end,                        desc = '[D]ebug run with [A]rgs' },
     { '<leader>dC', function() require('dap').run_to_cursor() end,                                         desc = '[D]ebug run to [C]ursor' },
     { '<leader>dl', function() require('dap').run_last() end,                                              desc = '[D]ebug run [L]ast' },
     { '<leader>di', function() require('dap').step_into() end,                                             desc = '[D]ebug step [I]nto' },

@@ -51,12 +51,56 @@ local function get_extended_capabilities()
     return ok and jdtls.extendedClientCapabilities or nil
 end
 
+-- jdtls extensions for debugging (java-debug-adapter) and tests (java-test), installed via Mason
+local function get_bundles()
+    local packages = vim.fn.expand("$MASON/packages")
+    local bundles = vim.fn.glob(packages .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar", true, true)
+    local excluded = {
+        ["com.microsoft.java.test.runner-jar-with-dependencies.jar"] = true,
+        ["jacocoagent.jar"] = true,
+    }
+    for _, jar in ipairs(vim.fn.glob(packages .. "/java-test/extension/server/*.jar", true, true)) do
+        if not excluded[vim.fn.fnamemodify(jar, ":t")] then
+            table.insert(bundles, jar)
+        end
+    end
+    return bundles
+end
+
+-- Run a main class without the debugger (fast start, breakpoints are ignored)
+local function run_main()
+    require("jdtls.dap").fetch_main_configs({ config_overrides = { noDebug = true } }, function(configs)
+        vim.schedule(function()
+            if #configs == 0 then
+                vim.notify("No main class found", vim.log.levels.WARN)
+                return
+            end
+            if #configs == 1 then
+                require("dap").run(configs[1])
+                return
+            end
+            vim.ui.select(configs, {
+                prompt = "Run main class",
+                format_item = function(config) return config.name end,
+            }, function(config)
+                if config then
+                    require("dap").run(config)
+                end
+            end)
+        end)
+    end)
+end
+
 -- Java specific keymaps (nvim-jdtls helpers)
 -- extract / inline / organize imports are available via code actions (<leader>ca)
 local function on_attach(_, bufnr)
     local jdtls = require("jdtls")
 
+    -- register the java debug adapter, main classes are discovered on dap.continue()
+    jdtls.setup_dap({ hotcodereplace = "auto" })
+
     vim.keymap.set("n", "<leader>cju", jdtls.update_project_config, { buffer = bufnr, desc = "[C]ode [J]ava [U]pdate config" })
+    vim.keymap.set("n", "<leader>dR", run_main, { buffer = bufnr, desc = "[D]ebug [R]un without debugger" })
 end
 
 ---@type vim.lsp.Config
@@ -86,6 +130,7 @@ return {
     end,
     init_options = {
         extendedClientCapabilities = get_extended_capabilities(),
+        bundles = get_bundles(),
     },
     settings = {
         java = {
