@@ -2,8 +2,8 @@
 -- vim.o.showmode = false       -- hide mode display
 vim.o.cursorline      = true -- highlight current line
 -- lines
-vim.wo.number         = true -- display line numbers
-vim.wo.relativenumber = true -- display relative line numbers
+vim.o.number          = true -- display line numbers
+vim.o.relativenumber  = true -- display relative line numbers
 vim.o.scrolloff       = 10   -- number of lines to keep above/below the cursor
 vim.o.sidescrolloff   = 5    -- number of columns to keep the the left/right to the cursor
 -- tabs

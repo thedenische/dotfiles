@@ -17,18 +17,21 @@ end
 return {
     ensure_installed = {
         -- LSP servers
-        { "jdtls",                  condition = has("java") },                   -- java
-        "lua_ls",                                                                -- lua (always needed for nvim config)
-        { "pyright",                condition = has("python3", "node", "npm") }, -- python (npm package)
-        { "ruff",                   condition = has("python3") },                -- python linting and formatting
-        { "yamlls",                 condition = has("node", "npm") },            -- yaml (npm package)
-        "lemminx",                                                               -- xml (standalone binary)
-        { "vtsls",                  condition = has("node", "npm") },            -- type script (npm package)
-        { "docker_language_server", condition = has("docker") },                 -- docker
-        "harper_ls",                                                             -- grammar checker
+        { 'jdtls',                  condition = has('java') },                   -- java
+        'lua_ls',                                                                -- lua (always needed for nvim config)
+        { 'pyright',                condition = has('python3', 'node', 'npm') }, -- python (npm package)
+        { 'ruff',                   condition = has('python3') },                -- python linting and formatting
+        { 'yamlls',                 condition = has('node', 'npm') },            -- yaml (npm package)
+        'lemminx',                                                               -- xml (standalone binary)
+        { 'vtsls',                  condition = has('node', 'npm') },            -- type script (npm package)
+        { 'docker_language_server', condition = has('docker') },                 -- docker
+        'harper_ls',                                                             -- grammar checker
+
+        -- Formatters (see conform)
+        { 'prettier', condition = has('node', 'npm') },
 
         -- Java debug and test
-        { "java-debug-adapter", condition = has("java") },
-        { "java-test",          condition = has("java") },
+        { 'java-debug-adapter', condition = has('java') },
+        { 'java-test',          condition = has('java') },
     },
 }

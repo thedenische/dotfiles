@@ -1,4 +1,5 @@
 vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
 
 --
 -- Common
@@ -24,5 +25,5 @@ vim.keymap.set('n', '<leader>xq', function()
     local ok, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
     if not ok and err then vim.notify(err, vim.log.levels.ERROR) end
 end, { desc = 'Lists: [Q]uickfix list toggle' })
--- Remove search highlights after serchnig
+-- Remove search highlights after searching
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<cr>', { desc = 'Clear search highlights' })

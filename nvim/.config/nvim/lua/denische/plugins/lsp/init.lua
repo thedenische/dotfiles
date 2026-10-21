@@ -1,68 +1,52 @@
 return {
-    -- LSP servers configration
+    -- LSP servers configuration
     {
-        "neovim/nvim-lspconfig",
+        'neovim/nvim-lspconfig',
     },
     -- LSP servers installation
     {
-        "mason-org/mason.nvim",
+        'mason-org/mason.nvim',
         config = true,
         keys = {
-            { "<leader>cm", "<cmd>Mason<cr>", desc = "[C]ode [M]ason" },
+            { '<leader>cm', '<cmd>Mason<cr>', desc = '[C]ode [M]ason' },
         },
     },
     -- Connection between lspconfig and mason
     -- Automatic enabling of installed LSP servers
     {
-        "mason-org/mason-lspconfig.nvim",
+        'mason-org/mason-lspconfig.nvim',
         config = function()
-            require("denische.plugins.lsp.mason-lspconfig.config")
+            require('denische.plugins.lsp.mason-lspconfig.config')
         end,
         dependencies = {
-            "mason-org/mason.nvim",
-            "neovim/nvim-lspconfig",
-            "mfussenegger/nvim-jdtls"
+            'mason-org/mason.nvim',
+            'neovim/nvim-lspconfig',
+            'mfussenegger/nvim-jdtls'
         },
     },
-    -- All Mason packages installation (LSP servers, debug adapters, test runners, ...)
+    -- All Mason packages installation (LSP servers, formatters, debug adapters, test runners, ...)
     {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = require("denische.plugins.lsp.mason-tool-installer.options"),
+        'WhoIsSethDaniel/mason-tool-installer.nvim',
+        opts = require('denische.plugins.lsp.mason-tool-installer.options'),
         dependencies = {
-            "mason-org/mason.nvim",
-            "mason-org/mason-lspconfig.nvim", -- maps lspconfig names to Mason packages
+            'mason-org/mason.nvim',
+            'mason-org/mason-lspconfig.nvim', -- maps lspconfig names to Mason packages
         },
     },
+    -- Formatting (formatters by filetype, LSP formatting as fallback)
     {
-        "nvim-treesitter/nvim-treesitter",
-        branch = "main",
-        lazy = false,
-        build = ":TSUpdate",
-        config = function()
-            require("denische.plugins.lsp.treesitter.config")
-        end,
-    },
-    -- Integration CLI tools to the LSP
-    {
-        "nvimtools/none-ls.nvim",
-        config = function()
-            require("denische.plugins.lsp.nonels.config")
-        end,
-    },
-    -- Make LSP aware of file operations
-    {
-        "antosha417/nvim-lsp-file-operations",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
+        'stevearc/conform.nvim',
+        event = 'BufWritePre',
+        cmd = 'ConformInfo',
+        keys = {
+            { '<leader>cf', function() require('conform').format({ lsp_format = 'fallback' }) end, desc = '[C]ode [F]ormat', mode = { 'n', 'x' } },
         },
-        config = function()
-            require("lsp-file-operations").setup()
-        end,
+        opts = require('denische.plugins.lsp.conform.options'),
     },
-    -- Lua LSP configration
+    -- Lua LSP configuration
     {
-        "folke/lazydev.nvim",
-        ft = "lua", -- only load on lua files
-        opts = require("denische.plugins.lsp.lazydev.options"),
+        'folke/lazydev.nvim',
+        ft = 'lua', -- only load on lua files
+        opts = require('denische.plugins.lsp.lazydev.options'),
     },
 }

@@ -1,22 +1,18 @@
 return {
-    -- Rework nvim UI
+    -- Rework nvim UI (notifications are shown by snacks.notifier)
     {
         'folke/noice.nvim',
         event = 'VeryLazy',
         opts = require('denische.plugins.ui.noice.options'),
         keys = require('denische.plugins.ui.noice.keymaps'),
         dependencies = {
-            -- if you lazy-load any plugin below, make sure to add proper `module='...'` entries
             'MunifTanjim/nui.nvim',
-            -- OPTIONAL:
-            --   `nvim-notify` is only needed, if you want to use the notification view.
-            --   If not available, we use `mini` as the fallback
-            'rcarriga/nvim-notify',
         }
     },
     -- Status line
     {
         'nvim-lualine/lualine.nvim',
+        event = 'VeryLazy',
         dependencies = {
             'nvim-tree/nvim-web-devicons',
             'AndreM222/copilot-lualine',
@@ -33,11 +29,11 @@ return {
             highlight = true,
         },
     },
-    -- Shortcats help
+    -- Shortcuts help
     {
         'folke/which-key.nvim',
         event = 'VeryLazy',
-        opts = require('denische.plugins.ui.whichkeys.options'),
-        keys = require('denische.plugins.ui.whichkeys.keymaps'),
+        opts = require('denische.plugins.ui.which-key.options'),
+        keys = require('denische.plugins.ui.which-key.keymaps'),
     }
 }

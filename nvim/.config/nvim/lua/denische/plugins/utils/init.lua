@@ -3,6 +3,7 @@ return {
     {
         'echasnovski/mini.nvim',
         version = false,
+        event = 'VeryLazy',
         config = function()
             require('denische.plugins.utils.mini.config')
         end

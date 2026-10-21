@@ -24,7 +24,7 @@ return {
             },
             extensions = {
                 mcphub = {
-                    callback = "mcphub.extensions.codecompanion",
+                    callback = 'mcphub.extensions.codecompanion',
                     opts = {
                         -- MCP Tools
                         make_tools = true,                -- Make individual tools (@server__tool) and server groups (@server) from MCP servers
@@ -43,7 +43,7 @@ return {
         dependencies = {
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
-            'echasnovski/mini.diff',
+            'echasnovski/mini.nvim', -- mini.diff shows inline AI edits
             {
                 'MeanderingProgrammer/render-markdown.nvim',
                 ft = { 'markdown', 'codecompanion' }
@@ -51,13 +51,14 @@ return {
         },
     },
     {
-        "ravitemer/mcphub.nvim",
+        'ravitemer/mcphub.nvim',
+        cmd = 'MCPHub', -- also loaded by the codecompanion extension
         dependencies = {
-            "nvim-lua/plenary.nvim",
+            'nvim-lua/plenary.nvim',
         },
-        build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
-        config = function()
-            require("mcphub").setup()
-        end
+        build = 'bundled_build.lua', -- installs `mcp-hub` locally in the plugin dir (no global npm package)
+        opts = {
+            use_bundled_binary = true,
+        },
     }
 }
