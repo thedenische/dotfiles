@@ -54,7 +54,8 @@ end
 -- jdtls extensions for debugging (java-debug-adapter) and tests (java-test), installed via Mason
 local function get_bundles()
     local packages = vim.fn.expand('$MASON/packages')
-    local bundles = vim.fn.glob(packages .. '/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar', true, true)
+    local bundles = vim.fn.glob(packages .. '/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar',
+        true, true)
     local excluded = {
         ['com.microsoft.java.test.runner-jar-with-dependencies.jar'] = true,
         ['jacocoagent.jar'] = true,
@@ -99,7 +100,8 @@ local function on_attach(_, bufnr)
     -- register the java debug adapter, main classes are discovered on dap.continue()
     jdtls.setup_dap({ hotcodereplace = 'auto' })
 
-    vim.keymap.set('n', '<leader>cju', jdtls.update_project_config, { buffer = bufnr, desc = '[C]ode [J]ava [U]pdate config' })
+    vim.keymap.set('n', '<leader>cju', jdtls.update_project_config,
+        { buffer = bufnr, desc = '[C]ode [J]ava [U]pdate config' })
     vim.keymap.set('n', '<leader>dR', run_main, { buffer = bufnr, desc = '[D]ebug [R]un without debugger' })
 end
 
