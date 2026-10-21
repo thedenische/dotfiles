@@ -76,15 +76,12 @@ local function setup_neotest()
         adapters = {
             require('neotest-java'),
         },
+        status = { virtual_text = true }, -- test result next to each test
+        output = { open_on_run = true },  -- show output after running a test
     })
 end
 
-local loaded = false
-local function load()
-    if loaded then
-        return
-    end
-    loaded = true
+local map = Config.on_demand(function()
     vim.pack.add({
         'https://github.com/nvim-neotest/nvim-nio',
         'https://github.com/nvim-lua/plenary.nvim',
@@ -96,21 +93,7 @@ local function load()
     })
     setup_dap()
     setup_neotest()
-end
-
-vim.api.nvim_create_autocmd('CmdUndefined', {
-    group = vim.api.nvim_create_augroup('UserDebugLoad', { clear = true }),
-    pattern = 'Neotest',
-    once = true,
-    callback = load,
-})
-
-local function map(mode, lhs, rhs, opts)
-    vim.keymap.set(mode, lhs, function()
-        load()
-        rhs()
-    end, opts)
-end
+end, { 'Neotest' })
 
 --
 -- DAP

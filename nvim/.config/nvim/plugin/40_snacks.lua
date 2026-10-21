@@ -1,6 +1,8 @@
 vim.pack.add({ 'https://github.com/folke/snacks.nvim' })
 
 require('snacks').setup({
+    -- disables LSP, treesitter, etc. in huge files
+    bigfile = {},
     dashboard = {
         -- default sections without 'startup' (it needs lazy.nvim)
         sections = {
@@ -15,11 +17,9 @@ require('snacks').setup({
         sources = {
             files = {
                 hidden = true,
-                ignored = true,
             },
             grep = {
                 hidden = true,
-                ignored = true,
             },
             explorer = {
                 follow_file = true,
@@ -49,6 +49,8 @@ map('n', '<leader>fg', function() Snacks.picker.git_files() end, { desc = '[F]in
 map('n', '<leader>fp', function() Snacks.picker.projects() end, { desc = '[F]ind [P]rojects' })
 map('n', '<leader>fr', function() Snacks.picker.recent() end, { desc = '[F]ind [R]ecent files' })
 -- git
+map('n', '<leader>gg', function() Snacks.lazygit({ cwd = Snacks.git.get_root() }) end, { desc = '[G]it lazy[G]it' })
+map('n', '<leader>gG', function() Snacks.lazygit() end, { desc = '[G]it lazy[G]it (cwd)' })
 map('n', '<leader>gb', function() Snacks.picker.git_log_line() end, { desc = '[G]it [B]lame line' })
 map('n', '<leader>gc', function() Snacks.picker.git_branches() end, { desc = '[G]it [C]heckout branch' })
 map('n', '<leader>gl', function() Snacks.picker.git_log({ cwd = Snacks.git.get_root() }) end, { desc = '[G]it [L]og' })
@@ -91,18 +93,34 @@ Snacks.toggle.diagnostics():map('<leader>ud')
 Snacks.toggle.inlay_hints():map('<leader>uh')
 Snacks.toggle.treesitter():map('<leader>uT')
 Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark background' }):map('<leader>ub')
--- LSP
-map('n', 'gd', function() Snacks.picker.lsp_definitions() end, { desc = '[G]oto [D]efinition' })
-map('n', 'gD', function() Snacks.picker.lsp_declarations() end, { desc = '[G]oto [D]eclaration' })
-map('n', 'gr', function() Snacks.picker.lsp_references() end, { desc = '[G]oto [R]eferences', nowait = true })
-map('n', 'gI', function() Snacks.picker.lsp_implementations() end, { desc = '[G]oto [I]mplementation' })
-map('n', 'gy', function() Snacks.picker.lsp_type_definitions() end, { desc = '[G]oto t[Y]pe definition' })
-map('n', 'gai', function() Snacks.picker.lsp_incoming_calls() end, { desc = '[G]oto c[A]lls [I]ncoming' })
-map('n', 'gao', function() Snacks.picker.lsp_outgoing_calls() end, { desc = '[G]oto c[A]lls [O]utgoing' })
-map('n', '<leader>sS', function() Snacks.picker.lsp_symbols() end, { desc = '[S]earch file [S]ymbols' })
-map('n', '<leader>ss', function() Snacks.picker.lsp_workspace_symbols() end, { desc = '[S]earch workspace [S]ymbols' })
-map('n', '<leader>cd', function() Snacks.picker.diagnostics() end, { desc = '[C]ode [D]iagnostics (workspace)' })
-map('n', '<leader>cD', function() Snacks.picker.diagnostics_buffer() end, { desc = '[C]ode [D]iagnostics (buffer)' })
+-- LSP (buffer-local, only where an attached server supports the method, so built-in gd, ga, [[, ]] keep working elsewhere)
+local function map_lsp(method, lhs, rhs, opts)
+    Snacks.keymap.set('n', lhs, rhs, vim.tbl_extend('force', opts, { lsp = { method = method } }))
+end
+map_lsp('textDocument/definition', 'gd', function() Snacks.picker.lsp_definitions() end,
+    { desc = '[G]oto [D]efinition' })
+map_lsp('textDocument/declaration', 'gD', function() Snacks.picker.lsp_declarations() end,
+    { desc = '[G]oto [D]eclaration' })
+map_lsp('textDocument/references', 'gr', function() Snacks.picker.lsp_references() end,
+    { desc = '[G]oto [R]eferences', nowait = true })
+map_lsp('textDocument/implementation', 'gI', function() Snacks.picker.lsp_implementations() end,
+    { desc = '[G]oto [I]mplementation' })
+map_lsp('textDocument/typeDefinition', 'gy', function() Snacks.picker.lsp_type_definitions() end,
+    { desc = '[G]oto t[Y]pe definition' })
+map_lsp('callHierarchy/incomingCalls', 'gai', function() Snacks.picker.lsp_incoming_calls() end,
+    { desc = '[G]oto c[A]lls [I]ncoming' })
+map_lsp('callHierarchy/outgoingCalls', 'gao', function() Snacks.picker.lsp_outgoing_calls() end,
+    { desc = '[G]oto c[A]lls [O]utgoing' })
+map_lsp('textDocument/documentSymbol', '<leader>sS', function() Snacks.picker.lsp_symbols() end,
+    { desc = '[S]earch file [S]ymbols' })
+map_lsp('workspace/symbol', '<leader>ss', function() Snacks.picker.lsp_workspace_symbols() end,
+    { desc = '[S]earch workspace [S]ymbols' })
 -- words (references of the word under cursor)
-map('n', ']]', function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next reference' })
-map('n', '[[', function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Previous reference' })
+map_lsp('textDocument/documentHighlight', ']]', function() Snacks.words.jump(vim.v.count1) end,
+    { desc = 'Next reference' })
+map_lsp('textDocument/documentHighlight', '[[', function() Snacks.words.jump(-vim.v.count1) end,
+    { desc = 'Previous reference' })
+-- diagnostics (also from non-LSP sources)
+map('n', '<leader>cd', vim.diagnostic.open_float, { desc = '[C]ode line [D]iagnostics' })
+map('n', '<leader>sd', function() Snacks.picker.diagnostics() end, { desc = '[S]earch [D]iagnostics (workspace)' })
+map('n', '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = '[S]earch [D]iagnostics (buffer)' })

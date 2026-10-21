@@ -1,54 +1,43 @@
 local map = vim.keymap.set
 
---
--- LspAttach: keymaps, folds, breadcrumbs
---
+-- let servers update imports etc. when a file is renamed (<leader>cR), Neovim does not advertise this by default
+vim.lsp.config('*', {
+    capabilities = {
+        workspace = {
+            fileOperations = { didRename = true, willRename = true },
+        },
+    },
+})
 
--- buffer-local keymaps ({ key, func, desc, mode = 'n' by default, has = LSP method the server must support })
-local lsp_keymaps = {
-    { '<leader>cr', vim.lsp.buf.rename,                         '[C]ode [R]ename',     has = 'textDocument/rename' },
-    { '<leader>ca', vim.lsp.buf.code_action,                    '[C]ode [A]ctions',    has = 'textDocument/codeAction', mode = { 'n', 'x' } },
-    { '<leader>cR', function() Snacks.rename.rename_file() end, '[C]ode [R]ename file' },
-    { '<leader>cl', function() Snacks.picker.lsp_config() end,  '[C]ode [L]SP info' },
-}
+map('n', '<leader>cr', vim.lsp.buf.rename, { desc = '[C]ode [R]ename' })
+map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ctions' })
+map('n', '<leader>cR', function() Snacks.rename.rename_file() end, { desc = '[C]ode [R]ename file' })
+map('n', '<leader>cl', function() Snacks.picker.lsp_config() end, { desc = '[C]ode [L]SP info' })
 
-local function set_keymaps(client, buf)
-    for _, row in ipairs(lsp_keymaps) do
-        -- skip keymaps the server can't handle (other clients on the buffer may still set them)
-        if not row.has or client:supports_method(row.has, buf) then
-            local key, func, desc = row[1], row[2], row[3]
-            map(row.mode or 'n', key, func, { buffer = buf, desc = desc })
-        end
-    end
-end
-
--- use LSP folds when the server supports them (in every window showing the buffer)
-local function set_folds(client, buf)
-    if not client:supports_method('textDocument/foldingRange', buf) then
-        return
-    end
+-- use LSP folds when the server supports them, also when the buffer is later shown in another window
+local function use_lsp_folds(buf)
     for _, win in ipairs(vim.fn.win_findbuf(buf)) do
         vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
     end
 end
-
--- attach navic for lsp based breadcrumbs (navic supports only one client per buffer)
-local function set_navic(client, buf)
-    if client:supports_method('textDocument/documentSymbol', buf) and not vim.b[buf].navic_client_id then
-        require('nvim-navic').attach(client, buf)
-    end
-end
-
+local lsp_folds_group = vim.api.nvim_create_augroup('UserLspFolds', { clear = true })
 vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+    group = lsp_folds_group,
     callback = function(event)
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if not client then
+        if not client or not client:supports_method('textDocument/foldingRange', event.buf) then
             return
         end
-        set_keymaps(client, event.buf)
-        set_folds(client, event.buf)
-        set_navic(client, event.buf)
+        vim.b[event.buf].user_lsp_folds = true
+        use_lsp_folds(event.buf)
+    end,
+})
+vim.api.nvim_create_autocmd('BufWinEnter', {
+    group = lsp_folds_group,
+    callback = function(event)
+        if vim.b[event.buf].user_lsp_folds then
+            use_lsp_folds(event.buf)
+        end
     end,
 })
 
@@ -64,9 +53,8 @@ Snacks.toggle({
     set = function(state) vim.g.disable_autoformat = not state end,
 }):map('<leader>uf')
 
--- plugins are loaded after startup (the first screen is drawn first),
--- servers enabled by mason-lspconfig attach to already open buffers
-vim.schedule(function()
+-- plugins are loaded after startup, servers enabled by mason-lspconfig attach to already open buffers
+MiniMisc.safely('later', function()
     vim.pack.add({
         -- LSP servers configuration
         'https://github.com/neovim/nvim-lspconfig',
@@ -109,7 +97,7 @@ vim.schedule(function()
     require('mason-tool-installer').setup({
         ensure_installed = {
             -- LSP servers
-            { 'jdtls',   condition = has('java') },                       -- java
+            { 'jdtls',   condition = has('java', 'python3') },            -- java (python launcher script)
             'lua_ls',                                                     -- lua (always needed for nvim config)
             { 'pyright', condition = has('python3', 'node', 'npm') },     -- python (npm package)
             { 'ruff',    condition = has('python3') },                    -- python linting and formatting
@@ -117,7 +105,9 @@ vim.schedule(function()
             'lemminx',                                                    -- xml (standalone binary)
             { 'vtsls',                  condition = has('node', 'npm') }, -- type script (npm package)
             { 'docker_language_server', condition = has('docker') },      -- docker
+            { 'gopls',                  condition = has('go') },          -- go
             'harper_ls',                                                  -- grammar checker
+            { 'copilot',                condition = has('node', 'npm') }, -- AI suggestions in blink.cmp via blink-copilot (npm package)
 
             -- Formatters (see conform)
             { 'prettier',           condition = has('node', 'npm') },
@@ -127,6 +117,8 @@ vim.schedule(function()
             { 'java-test',          condition = has('java') },
         },
     })
+    -- its install check runs on VimEnter, which has already fired when this is loaded
+    require('mason-tool-installer').run_on_start()
 
     --
     -- Formatting
@@ -152,7 +144,7 @@ vim.schedule(function()
             if vim.g.disable_autoformat then
                 return
             end
-            return { timeout_ms = 500, lsp_format = 'fallback' }
+            return { timeout_ms = 3000, lsp_format = 'fallback' }
         end,
     })
 
@@ -164,6 +156,10 @@ vim.schedule(function()
         library = {
             -- load luvit types when the `vim.uv` word is found
             { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+            -- load snacks types when the `Snacks` global is used
+            { path = 'snacks.nvim', words = { 'Snacks' } },
+            -- load mini types when a `Mini*` global (MiniMisc, MiniIcons) is used
+            { path = 'mini.nvim', words = { 'Mini%u' } },
         },
     })
 end)

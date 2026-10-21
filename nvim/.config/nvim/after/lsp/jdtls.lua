@@ -1,48 +1,44 @@
 local jdtls_path = vim.fn.expand('$MASON/packages/jdtls')
 
--- Platform specific configuration directory shipped with jdtls
-local function get_os_config()
-    local machine = vim.uv.os_uname().machine
-    local arm = machine == 'arm64' or machine == 'aarch64'
-    local os_name
-    if vim.fn.has('mac') == 1 then
-        os_name = 'mac'
-    elseif vim.fn.has('win32') == 1 then
-        os_name = 'win'
-    else
-        os_name = 'linux'
-    end
-    if arm and os_name ~= 'win' then
-        os_name = os_name .. '_arm'
-    end
-    return jdtls_path .. '/config_' .. os_name
-end
-
-local function get_launcher()
-    local jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar', true, true)[1]
-    assert(jar, 'jdtls launcher jar not found, is jdtls installed via Mason?')
-    return jar
-end
-
 -- Unique workspace per project path (basename alone can collide)
 local function get_workspace(root)
     local name = vim.fn.fnamemodify(root, ':p:h:t') .. '-' .. vim.fn.sha256(root):sub(1, 8)
     return vim.fn.stdpath('cache') .. '/jdtls/' .. name
 end
 
--- jdtls itself requires Java 21+, prefer an explicit JDK over the one in PATH
+-- jdtls itself requires Java 21+, so it runs on the newest installed JDK instead of the project one
+-- (JAVA_HOME / PATH can point to an older JDK), JDTLS_JAVA_HOME overrides it
 local function get_java()
-    local home = os.getenv('JDTLS_JAVA_HOME') or os.getenv('JAVA_HOME')
+    local home = os.getenv('JDTLS_JAVA_HOME')
     if home and home ~= '' then
         return home .. '/bin/java'
     end
+
+    -- newest JDK installed by mise (versions like 'openjdk-27.0.0' or 'temurin-21.0.5+11')
     local mise = vim.fn.expand('~/.local/bin/mise')
     if vim.fn.executable(mise) == 1 then
-        local result = vim.system({ mise, 'where', 'java' }, { text = true }):wait()
+        local result = vim.system({ mise, 'ls', '--installed', '--json', 'java' }, { text = true }):wait()
+        local ok, installs = pcall(vim.json.decode, result.stdout or '')
+        local newest, newest_path
+        for _, install in ipairs(ok and type(installs) == 'table' and installs or {}) do
+            local version = vim.version.parse((install.version or ''):match('(%d[%d%.]*)[^-]*$') or '', { strict = false })
+            if version and version.major >= 21 and (not newest or vim.version.gt(version, newest)) then
+                newest, newest_path = version, install.install_path
+            end
+        end
+        if newest_path then
+            return newest_path .. '/bin/java'
+        end
+    end
+
+    -- newest JDK registered in macOS (Homebrew cask, vendor installers)
+    if vim.fn.executable('/usr/libexec/java_home') == 1 then
+        local result = vim.system({ '/usr/libexec/java_home', '-v', '21+' }, { text = true }):wait()
         if result.code == 0 and result.stdout ~= '' then
             return vim.trim(result.stdout) .. '/bin/java'
         end
     end
+
     return 'java'
 end
 
@@ -107,27 +103,15 @@ end
 
 ---@type vim.lsp.Config
 return {
+    -- Mason's jdtls launcher script adds the launcher jar, OS config and standard JVM flags
     cmd = function(dispatchers, config)
         local root = config.root_dir or vim.fn.getcwd()
         return vim.lsp.rpc.start({
-            get_java(),
-            '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-            '-Dosgi.bundles.defaultStartLevel=4',
-            '-Declipse.product=org.eclipse.jdt.ls.core.product',
-            '-Xms256m',
-            '-Xmx2g',
-            '--add-modules=ALL-SYSTEM',
-            '--add-opens',
-            'java.base/java.util=ALL-UNNAMED',
-            '--add-opens',
-            'java.base/java.lang=ALL-UNNAMED',
-            '-javaagent:' .. jdtls_path .. '/lombok.jar',
-            '-jar',
-            get_launcher(),
-            '-configuration',
-            get_os_config(),
-            '-data',
-            get_workspace(root),
+            'jdtls',
+            '--java-executable', get_java(),
+            '--jvm-arg=-Xmx2g',
+            '--jvm-arg=-javaagent:' .. jdtls_path .. '/lombok.jar',
+            '-data', get_workspace(root),
         }, dispatchers, { cwd = root })
     end,
     init_options = {

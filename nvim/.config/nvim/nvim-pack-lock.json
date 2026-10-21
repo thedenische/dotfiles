@@ -21,21 +21,9 @@
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim"
     },
-    "copilot-lualine": {
-      "rev": "222e90bd8dcdf16ca1efc4e784416afb5f011c31",
-      "src": "https://github.com/AndreM222/copilot-lualine"
-    },
-    "copilot.lua": {
-      "rev": "9d23575513f1d934c28b9f933b9dd680c0dcd9e3",
-      "src": "https://github.com/zbirenbaum/copilot.lua"
-    },
     "darcula": {
       "rev": "faf8dbab27bee0f27e4f1c3ca7e9695af9b1242b",
       "src": "https://github.com/doums/darcula"
-    },
-    "darcula-solid.nvim": {
-      "rev": "abd698d7e4630b5c8ccfaa0f07b8ad1a3db8bd08",
-      "src": "https://github.com/briones-gabriel/darcula-solid.nvim"
     },
     "diffview.nvim": {
       "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
@@ -65,17 +53,9 @@
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
     },
-    "lualine-macro-recording.nvim": {
-      "rev": "e2dcf63ba74e6111b53e1520a4f8a17a3d7427a1",
-      "src": "https://github.com/yavorski/lualine-macro-recording.nvim"
-    },
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
-    },
-    "lush.nvim": {
-      "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
-      "src": "https://github.com/rktjmp/lush.nvim"
     },
     "mason-lspconfig.nvim": {
       "rev": "00b5473cca4db5b410ff4bae724e3b6e21f2687f",
@@ -89,13 +69,9 @@
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/mason-org/mason.nvim"
     },
-    "mcphub.nvim": {
-      "rev": "7cd5db330f41b7bae02b2d6202218a061c3ebc1f",
-      "src": "https://github.com/ravitemer/mcphub.nvim"
-    },
     "mini.nvim": {
       "rev": "4d84086ab334a88201b803d11d1086406fe7e43d",
-      "src": "https://github.com/echasnovski/mini.nvim"
+      "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neotest": {
       "rev": "27bf921498043f7ecd821d6db68d05de244bbd02",
@@ -145,10 +121,6 @@
       "rev": "29212d826054bb2948fa9d3a99eca9bf6a050eb2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
-    },
-    "nvim-web-devicons": {
-      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
-      "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",

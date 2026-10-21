@@ -1,5 +1,4 @@
--- loaded after startup (the first screen is drawn first)
-vim.schedule(function()
+MiniMisc.safely('later', function()
     vim.pack.add({
         -- rework nvim UI (notifications are shown by snacks.notifier)
         'https://github.com/MunifTanjim/nui.nvim',
@@ -7,9 +6,6 @@ vim.schedule(function()
         -- LSP based breadcrumbs (for status line)
         'https://github.com/SmiteshP/nvim-navic',
         -- status line
-        'https://github.com/nvim-tree/nvim-web-devicons',
-        'https://github.com/AndreM222/copilot-lualine',
-        'https://github.com/yavorski/lualine-macro-recording.nvim',
         'https://github.com/nvim-lualine/lualine.nvim',
         -- shortcuts help
         'https://github.com/folke/which-key.nvim',
@@ -18,6 +14,13 @@ vim.schedule(function()
     })
 
     local map = vim.keymap.set
+
+    -- copilot icon colored by its status (set in after/lsp/copilot.lua), hidden when not attached
+    local function copilot_status()
+        local client = vim.lsp.get_clients({ name = 'copilot', bufnr = 0 })[1]
+        return client and (Config.copilot_status or {})[client.id]
+    end
+    local copilot_colors = { ok = 'Special', pending = 'DiagnosticWarn', error = 'DiagnosticError' }
 
     --
     -- Noice
@@ -49,11 +52,17 @@ vim.schedule(function()
     -- Status line
     --
 
+    -- auto attaches to the first LSP client with document symbols
     require('nvim-navic').setup({
         highlight = true,
+        lsp = { auto_attach = true },
     })
 
     require('lualine').setup({
+        options = {
+            globalstatus = vim.o.laststatus == 3, -- otherwise lualine resets laststatus to 2
+            disabled_filetypes = { statusline = { 'snacks_dashboard' } },
+        },
         sections = {
             lualine_b = {
                 'branch'
@@ -75,10 +84,27 @@ vim.schedule(function()
                 }
             },
             lualine_x = {
-                'macro_recording',
-                'diff',
+                -- macro recording (@q), captured by noice
+                {
+                    require('noice').api.status.mode.get,
+                    cond = require('noice').api.status.mode.has,
+                },
+                {
+                    'diff',
+                    -- counts from gitsigns instead of running git
+                    source = function()
+                        local gitsigns = vim.b.gitsigns_status_dict
+                        if gitsigns then
+                            return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed }
+                        end
+                    end,
+                },
                 'diagnostics',
-                'copilot',
+                {
+                    function() return '' end,
+                    cond = function() return copilot_status() ~= nil end,
+                    color = function() return copilot_colors[copilot_status()] end,
+                },
                 'encoding',
             },
         },
@@ -112,8 +138,8 @@ vim.schedule(function()
     })
 
     map('n', '<leader>?', function()
-        require('which-key').show({ global = true })
-    end, { desc = 'Show all keymaps (which-key)' })
+        require('which-key').show({ global = false })
+    end, { desc = 'Buffer keymaps (which-key)' })
 
     --
     -- Markdown
