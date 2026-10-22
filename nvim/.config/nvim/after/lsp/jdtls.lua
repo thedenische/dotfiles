@@ -97,8 +97,8 @@ local function on_attach(_, bufnr)
     jdtls.setup_dap({ hotcodereplace = 'auto' })
 
     vim.keymap.set('n', '<leader>cju', jdtls.update_project_config,
-        { buffer = bufnr, desc = '[C]ode [J]ava [U]pdate config' })
-    vim.keymap.set('n', '<leader>dR', run_main, { buffer = bufnr, desc = '[D]ebug [R]un without debugger' })
+        { buffer = bufnr, desc = 'Code Java Update config' })
+    vim.keymap.set('n', '<leader>dR', run_main, { buffer = bufnr, desc = 'Debug Run without debugger' })
 end
 
 ---@type vim.lsp.Config

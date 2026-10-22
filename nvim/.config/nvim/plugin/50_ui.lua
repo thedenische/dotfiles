@@ -116,24 +116,53 @@ MiniMisc.safely('later', function()
 
     local extras = require('which-key.extras')
 
+    -- descriptions of mini.ai text objects (plugin/50_editor.lua), built-in ones are described by which-key
+    local textobjects = { mode = { 'o', 'x' } }
+    for key, desc in pairs({
+        a = 'argument',
+        q = 'quote `"\'',
+        ['?'] = 'user prompt',
+        f = 'function',
+        c = 'class',
+        o = 'block, conditional, loop',
+        d = 'digits',
+        e = 'camelCase / snake_case part',
+        g = 'entire buffer',
+        u = 'function call',
+        U = 'function call without dot',
+    }) do
+        table.insert(textobjects, { 'a' .. key, desc = desc })
+        table.insert(textobjects, { 'i' .. key, desc = desc })
+    end
+
     require('which-key').setup({
+        icons = {
+            -- keymaps whose description has no word from which-key's built-in icon rules
+            rules = {
+                { pattern = '^grep', icon = ' ', color = 'green' },
+                { pattern = '^command history', icon = ' ', color = 'yellow' },
+                { pattern = '^explorer', icon = '󰙅 ', color = 'cyan' },
+                { pattern = 'clipboard', icon = '󰅇 ', color = 'yellow' },
+            },
+        },
         spec = {
-            { '<leader>g', group = '[G]it', icon = { cat = 'filetype', name = 'git' } },
-            { '<leader>gm', group = '[G]it [M]erge request' },
-            { '<leader>gh', group = '[G]it [H]unk' },
-            { '<leader>gt', group = '[G]it [T]oggle' },
-            { '<leader>s', group = '[S]earch', icon = { icon = ' ', color = 'blue' } },
-            { '<leader>u', group = '[U]I / settings' },
-            { '<leader>a', group = '[A]I', icon = { icon = ' ', color = 'purple' } },
-            { '<leader>f', group = '[F]ind', icon = { icon = ' ', color = 'green' } },
-            { '<leader>c', group = '[C]ode', mode = { 'n', 'x' }, icon = { icon = ' ', color = 'orange' } },
-            { '<leader>cj', group = '[C]ode [J]ava' },
-            { '<leader>b', group = '[B]uffer', expand = extras.expand.buf },
-            { '<leader>w', group = '[W]indow', proxy = '<c-w>', expand = extras.expand.win },
+            textobjects,
+            { '<leader>g', group = 'Git', icon = { cat = 'filetype', name = 'git' } },
+            { '<leader>gm', group = 'Git Merge request' },
+            { '<leader>gh', group = 'Git Hunk' },
+            { '<leader>gt', group = 'Git Toggle' },
+            { '<leader>s', group = 'Search', icon = { icon = ' ', color = 'blue' } },
+            { '<leader>u', group = 'UI / settings' },
+            { '<leader>a', group = 'AI', icon = { icon = ' ', color = 'purple' } },
+            { '<leader>f', group = 'Find', icon = { icon = ' ', color = 'green' } },
+            { '<leader>c', group = 'Code', mode = { 'n', 'x' }, icon = { icon = ' ', color = 'orange' } },
+            { '<leader>cj', group = 'Code Java' },
+            { '<leader>b', group = 'Buffer', expand = extras.expand.buf },
+            { '<leader>w', group = 'Window', proxy = '<c-w>', expand = extras.expand.win },
             { '<leader>x', group = 'Lists (quickfix / location)' },
-            { '<leader>q', group = '[Q]uit' },
-            { '<leader>d', group = '[D]ebug', icon = { icon = '󰃤 ', color = 'red' } },
-            { '<leader>t', group = '[T]est', icon = { cat = 'filetype', name = 'neotest-summary' } },
+            { '<leader>q', group = 'Quit' },
+            { '<leader>d', group = 'Debug', icon = { icon = '󰃤 ', color = 'red' } },
+            { '<leader>t', group = 'Test', icon = { cat = 'filetype', name = 'neotest-summary' } },
         },
     })
 

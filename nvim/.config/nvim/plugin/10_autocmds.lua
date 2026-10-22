@@ -70,13 +70,12 @@ vim.api.nvim_create_autocmd('FileType', {
     end,
 })
 
--- wrap and check spelling in text filetypes
+-- wrap lines in text filetypes (spelling and grammar are checked by harper_ls, built-in spell: <leader>us)
 vim.api.nvim_create_autocmd('FileType', {
-    group = augroup('WrapSpell'),
+    group = augroup('Wrap'),
     pattern = { 'text', 'gitcommit', 'markdown' },
     callback = function()
         vim.opt_local.wrap = true
-        vim.opt_local.spell = true
     end,
 })
 

@@ -23,7 +23,7 @@ end, { 'CodeCompanion*' })
 
 local map = vim.keymap.set
 
-map({ 'n', 'x' }, '<leader>ac', '<cmd>CodeCompanionChat Toggle<cr>', { desc = '[A]I [C]hat toggle' })
-map({ 'n', 'x' }, '<leader>aa', '<cmd>CodeCompanionActions<cr>', { desc = '[A]I [A]ctions' })
-map({ 'n', 'x' }, '<leader>ai', ':CodeCompanion ', { desc = '[A]I [I]nline prompt' })
-map('x', '<leader>as', '<cmd>CodeCompanionChat Add<cr>', { desc = '[A]I [S]end selection to chat' })
+map({ 'n', 'x' }, '<leader>ac', '<cmd>CodeCompanionChat Toggle<cr>', { desc = 'AI Chat toggle' })
+map({ 'n', 'x' }, '<leader>aa', '<cmd>CodeCompanionActions<cr>', { desc = 'AI Actions' })
+map({ 'n', 'x' }, '<leader>ai', ':CodeCompanion ', { desc = 'AI Inline prompt' })
+map('x', '<leader>as', '<cmd>CodeCompanionChat Add<cr>', { desc = 'AI Send selection to chat' })
