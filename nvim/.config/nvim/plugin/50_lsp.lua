@@ -9,10 +9,10 @@ vim.lsp.config('*', {
     },
 })
 
-map('n', '<leader>cr', vim.lsp.buf.rename, { desc = '[C]ode [R]ename' })
-map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ctions' })
-map('n', '<leader>cR', function() Snacks.rename.rename_file() end, { desc = '[C]ode [R]ename file' })
-map('n', '<leader>cl', function() Snacks.picker.lsp_config() end, { desc = '[C]ode [L]SP info' })
+map('n', '<leader>cr', vim.lsp.buf.rename, { desc = 'Code Rename' })
+map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code Actions' })
+map('n', '<leader>cR', function() Snacks.rename.rename_file() end, { desc = 'Code Rename file' })
+map('n', '<leader>cl', function() Snacks.picker.lsp_config() end, { desc = 'Code LSP info' })
 
 -- use LSP folds when the server supports them, also when the buffer is later shown in another window
 local function use_lsp_folds(buf)
@@ -41,10 +41,10 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     end,
 })
 
-map('n', '<leader>cm', '<cmd>Mason<cr>', { desc = '[C]ode [M]ason' })
+map('n', '<leader>cm', '<cmd>Mason<cr>', { desc = 'Code Mason' })
 map({ 'n', 'x' }, '<leader>cf', function()
     require('conform').format({ lsp_format = 'fallback' })
-end, { desc = '[C]ode [F]ormat' })
+end, { desc = 'Code Format' })
 
 -- format on save is on by default, this toggles it for all buffers
 Snacks.toggle({

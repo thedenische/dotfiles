@@ -27,9 +27,9 @@ local function setup_dap()
     -- breakpoint icons ({ icon, icon highlight, line highlight })
     local signs = {
         Stopped             = { '󰁕 ', 'DiagnosticWarn', 'DapStoppedLine' },
-        Breakpoint          = { ' ', 'DiagnosticInfo' },
-        BreakpointCondition = { ' ', 'DiagnosticInfo' },
-        BreakpointRejected  = { ' ', 'DiagnosticError' },
+        Breakpoint          = { ' ', 'DiagnosticInfo' },
+        BreakpointCondition = { ' ', 'DiagnosticInfo' },
+        BreakpointRejected  = { ' ', 'DiagnosticError' },
         LogPoint            = { '.>', 'DiagnosticInfo' },
     }
 
@@ -99,43 +99,43 @@ end, { 'Neotest' })
 -- DAP
 --
 
-map('n', '<leader>db', function() require('dap').toggle_breakpoint() end, { desc = '[D]ebug [B]reakpoint' })
+map('n', '<leader>db', function() require('dap').toggle_breakpoint() end, { desc = 'Debug Breakpoint' })
 map('n', '<leader>dB', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
-    { desc = '[D]ebug conditional [B]reakpoint' })
-map('n', '<leader>dc', function() require('dap').continue() end, { desc = '[D]ebug run / [C]ontinue' })
+    { desc = 'Debug conditional Breakpoint' })
+map('n', '<leader>dc', function() require('dap').continue() end, { desc = 'Debug run / Continue' })
 map('n', '<leader>da', function() require('dap').continue({ before = with_args }) end,
-    { desc = '[D]ebug run with [A]rgs' })
-map('n', '<leader>dC', function() require('dap').run_to_cursor() end, { desc = '[D]ebug run to [C]ursor' })
-map('n', '<leader>dl', function() require('dap').run_last() end, { desc = '[D]ebug run [L]ast' })
-map('n', '<leader>di', function() require('dap').step_into() end, { desc = '[D]ebug step [I]nto' })
-map('n', '<leader>dO', function() require('dap').step_over() end, { desc = '[D]ebug step [O]ver' })
-map('n', '<leader>do', function() require('dap').step_out() end, { desc = '[D]ebug step [O]ut' })
-map('n', '<leader>dj', function() require('dap').down() end, { desc = '[D]ebug stack down (j)' })
-map('n', '<leader>dk', function() require('dap').up() end, { desc = '[D]ebug stack up (k)' })
-map('n', '<leader>dP', function() require('dap').pause() end, { desc = '[D]ebug [P]ause' })
-map('n', '<leader>dr', function() require('dap').repl.toggle() end, { desc = '[D]ebug [R]EPL' })
-map('n', '<leader>dt', function() require('dap').terminate() end, { desc = '[D]ebug [T]erminate' })
-map('n', '<leader>dw', function() require('dap.ui.widgets').hover() end, { desc = '[D]ebug [W]idgets' })
-map('n', '<leader>du', function() require('dapui').toggle() end, { desc = '[D]ebug [U]I toggle' })
-map({ 'n', 'x' }, '<leader>de', function() require('dapui').eval() end, { desc = '[D]ebug [E]val' })
+    { desc = 'Debug run with Args' })
+map('n', '<leader>dC', function() require('dap').run_to_cursor() end, { desc = 'Debug run to Cursor' })
+map('n', '<leader>dl', function() require('dap').run_last() end, { desc = 'Debug run Last' })
+map('n', '<leader>di', function() require('dap').step_into() end, { desc = 'Debug step Into' })
+map('n', '<leader>dO', function() require('dap').step_over() end, { desc = 'Debug step Over' })
+map('n', '<leader>do', function() require('dap').step_out() end, { desc = 'Debug step Out' })
+map('n', '<leader>dj', function() require('dap').down() end, { desc = 'Debug stack down (j)' })
+map('n', '<leader>dk', function() require('dap').up() end, { desc = 'Debug stack up (k)' })
+map('n', '<leader>dP', function() require('dap').pause() end, { desc = 'Debug Pause' })
+map('n', '<leader>dr', function() require('dap').repl.toggle() end, { desc = 'Debug REPL' })
+map('n', '<leader>dt', function() require('dap').terminate() end, { desc = 'Debug Terminate' })
+map('n', '<leader>dw', function() require('dap.ui.widgets').hover() end, { desc = 'Debug Widgets' })
+map('n', '<leader>du', function() require('dapui').toggle() end, { desc = 'Debug UI toggle' })
+map({ 'n', 'x' }, '<leader>de', function() require('dapui').eval() end, { desc = 'Debug Eval' })
 
 --
 -- Neotest
 --
 
-map('n', '<leader>tr', function() require('neotest').run.run() end, { desc = '[T]est [R]un nearest' })
-map('n', '<leader>tt', function() require('neotest').run.run(vim.fn.expand('%')) end, { desc = '[T]est [T]his file' })
-map('n', '<leader>tT', function() require('neotest').run.run(vim.uv.cwd()) end, { desc = '[T]est all files ([T])' })
-map('n', '<leader>tl', function() require('neotest').run.run_last() end, { desc = '[T]est run [L]ast' })
+map('n', '<leader>tr', function() require('neotest').run.run() end, { desc = 'Test Run nearest' })
+map('n', '<leader>tt', function() require('neotest').run.run(vim.fn.expand('%')) end, { desc = 'Test This file' })
+map('n', '<leader>tT', function() require('neotest').run.run(vim.uv.cwd()) end, { desc = 'Test all files' })
+map('n', '<leader>tl', function() require('neotest').run.run_last() end, { desc = 'Test run Last' })
 map('n', '<leader>td', function() require('neotest').run.run({ strategy = 'dap' }) end,
-    { desc = '[T]est [D]ebug nearest' })
+    { desc = 'Test Debug nearest' })
 map('n', '<leader>tD', function() require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' }) end,
-    { desc = '[T]est [D]ebug file' })
-map('n', '<leader>ta', function() require('neotest').run.attach() end, { desc = '[T]est [A]ttach' })
-map('n', '<leader>tS', function() require('neotest').run.stop() end, { desc = '[T]est [S]top' })
-map('n', '<leader>ts', function() require('neotest').summary.toggle() end, { desc = '[T]est [S]ummary toggle' })
+    { desc = 'Test Debug file' })
+map('n', '<leader>ta', function() require('neotest').run.attach() end, { desc = 'Test Attach' })
+map('n', '<leader>tS', function() require('neotest').run.stop() end, { desc = 'Test Stop' })
+map('n', '<leader>ts', function() require('neotest').summary.toggle() end, { desc = 'Test Summary toggle' })
 map('n', '<leader>to', function() require('neotest').output.open({ enter = true, auto_close = true }) end,
-    { desc = '[T]est [O]utput' })
-map('n', '<leader>tO', function() require('neotest').output_panel.toggle() end, { desc = '[T]est [O]utput panel toggle' })
+    { desc = 'Test Output' })
+map('n', '<leader>tO', function() require('neotest').output_panel.toggle() end, { desc = 'Test Output panel toggle' })
 map('n', '<leader>tw', function() require('neotest').watch.toggle(vim.fn.expand('%')) end,
-    { desc = '[T]est [W]atch toggle' })
+    { desc = 'Test Watch toggle' })
