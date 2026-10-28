@@ -24,4 +24,8 @@ l = ["function:moveWindowToEastScreen", "east screen"]
 j = ["function:minimizeWindow", "minimize"]
 k = ["function:toggleMaximizeWindow", "maximize"]
 f = ["function:fullscreenWindow", "fullscreen"]
+left = ["function:halfWindowLeft", "left half"]
+right = ["function:halfWindowRight", "right half"]
+up = ["function:halfWindowTop", "top half"]
+down = ["function:halfWindowBottom", "bottom half"]
 
